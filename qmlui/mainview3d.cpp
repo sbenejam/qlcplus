@@ -47,6 +47,25 @@
 
 //#define SHOW_FRAMEGRAPH
 
+static bool isQt3DSupportedFixtureType(QLCFixtureDef::FixtureType type)
+{
+    switch (type)
+    {
+        case QLCFixtureDef::ColorChanger:
+        case QLCFixtureDef::Dimmer:
+        case QLCFixtureDef::MovingHead:
+        case QLCFixtureDef::Scanner:
+        case QLCFixtureDef::Strobe:
+        case QLCFixtureDef::Hazer:
+        case QLCFixtureDef::Smoke:
+        case QLCFixtureDef::LEDBarBeams:
+        case QLCFixtureDef::LEDBarPixels:
+            return true;
+        default:
+            return false;
+    }
+}
+
 MainView3D::MainView3D(QQuickView *view, Doc *doc, QObject *parent)
     : PreviewContext(view, doc, "3D", parent)
     , m_monProps(doc->monitorProperties())
@@ -585,6 +604,13 @@ void MainView3D::createFixtureItems(quint32 fxID, QVector3D pos, bool mmCoords)
     if (fixture == nullptr)
         return;
 
+    if (!isQt3DSupportedFixtureType(fixture->type()))
+    {
+        qDebug() << "MainView3D: skipping unsupported fixture type in Qt3D path"
+                 << fixture->type() << "for fixture" << fxID;
+        return;
+    }
+
     if (fixture->type() == QLCFixtureDef::Dimmer)
     {
         for (quint32 i = 0; i < fixture->channels(); i++)
@@ -612,6 +638,13 @@ void MainView3D::createFixtureItem(quint32 fxID, quint16 headIndex, quint16 link
     Fixture *fixture = m_doc->fixture(fxID);
     if (fixture == nullptr)
         return;
+
+    if (!isQt3DSupportedFixtureType(fixture->type()))
+    {
+        qDebug() << "MainView3D: skipping unsupported fixture type in Qt3D path"
+                 << fixture->type() << "for fixture" << fxID;
+        return;
+    }
 
     QLCFixtureMode *fxMode = fixture->fixtureMode();
     QString meshPath = meshDirectory() + "fixtures" + QDir::separator();
