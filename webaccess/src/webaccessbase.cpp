@@ -38,6 +38,7 @@
 #include "inputpatch.h"
 #include "audiocapture.h"
 #include "audiorenderer.h"
+#include "qlcioplugin.h"
 #include "qhttpserver.h"
 #include "qhttprequest.h"
 #include "qhttpresponse.h"
@@ -536,6 +537,19 @@ bool WebAccessBase::handleCommonWebSocketCommand(QHttpConnection *conn, const We
 
     if (cmdList[0] == "QLC+IO")
     {
+        auto parseLineIndex = [&](int paramIndex) -> quint32
+        {
+            if (cmdList.count() <= paramIndex)
+                return QLCIOPlugin::invalidLine();
+
+            bool ok = false;
+            int line = cmdList.at(paramIndex).trimmed().toInt(&ok);
+            if (!ok || line < 0)
+                return QLCIOPlugin::invalidLine();
+
+            return quint32(line);
+        };
+
         if (m_auth && user && user->level < SUPER_ADMIN_LEVEL)
             return true;
 
@@ -546,21 +560,33 @@ bool WebAccessBase::handleCommonWebSocketCommand(QHttpConnection *conn, const We
 
         if (cmdList[1] == "INPUT")
         {
-            m_doc->inputOutputMap()->setInputPatch(universe, cmdList[3], "", cmdList[4].toUInt());
+            if (cmdList.count() < 5)
+                return true;
+
+            m_doc->inputOutputMap()->setInputPatch(universe, cmdList[3], "", parseLineIndex(4));
             m_doc->inputOutputMap()->saveDefaults();
         }
         else if (cmdList[1] == "OUTPUT")
         {
-            m_doc->inputOutputMap()->setOutputPatch(universe, cmdList[3], "", cmdList[4].toUInt(), false);
+            if (cmdList.count() < 5)
+                return true;
+
+            m_doc->inputOutputMap()->setOutputPatch(universe, cmdList[3], "", parseLineIndex(4), false);
             m_doc->inputOutputMap()->saveDefaults();
         }
         else if (cmdList[1] == "FB")
         {
-            m_doc->inputOutputMap()->setOutputPatch(universe, cmdList[3], "", cmdList[4].toUInt(), true);
+            if (cmdList.count() < 5)
+                return true;
+
+            m_doc->inputOutputMap()->setOutputPatch(universe, cmdList[3], "", parseLineIndex(4), true);
             m_doc->inputOutputMap()->saveDefaults();
         }
         else if (cmdList[1] == "PROFILE")
         {
+            if (cmdList.count() < 4)
+                return true;
+
             InputPatch *inPatch = m_doc->inputOutputMap()->inputPatch(universe);
             if (inPatch != nullptr)
             {
@@ -570,6 +596,9 @@ bool WebAccessBase::handleCommonWebSocketCommand(QHttpConnection *conn, const We
         }
         else if (cmdList[1] == "PASSTHROUGH")
         {
+            if (cmdList.count() < 4)
+                return true;
+
             quint32 uniIdx = cmdList[2].toUInt();
             m_doc->inputOutputMap()->setUniversePassthrough(uniIdx, cmdList[3] == "true");
             m_doc->inputOutputMap()->saveDefaults();

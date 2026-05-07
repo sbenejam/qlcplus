@@ -62,9 +62,9 @@ QString WebAccessConfiguration::getIOConfigHTML(const Doc *doc)
                 feedbackLines.append(QString("%1,%2,%3").arg(pluginName).arg(outputs.at(i)).arg(i));
         }
     }
-    inputLines.prepend("None, None, -1");
-    outputLines.prepend("None, None, -1");
-    feedbackLines.prepend("None, None, -1");
+    inputLines.prepend("None,None,-1");
+    outputLines.prepend("None,None,-1");
+    feedbackLines.prepend("None,None,-1");
     profiles.prepend("None");
 
     html += "<table class=\"hovertable\" style=\"width: 100%;\">\n";
