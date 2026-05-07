@@ -377,8 +377,10 @@ static QString getSimpleDeskQmlHtml(const Doc *doc, const SimpleDesk *sd)
 
     bodyHTML += "</select>\n"
                 "</div>\n"
-                "<button class=\"nav-btn\" id=\"resetUniverseBtn\" type=\"button\">"
-                + QObject::tr("Reset universe") + "</button>\n"
+                "<button class=\"nav-btn\" id=\"resetUniverseBtn\" type=\"button\" "
+                "title=\"" + QObject::tr("Reset the selected universe") + "\" "
+                "aria-label=\"" + QObject::tr("Reset the selected universe") + "\">"
+                "<span class=\"fa-icon\">&#xf00d;</span></button>\n"
                 "<div class=\"sd-section\">\n"
                 "<div class=\"sd-label\">" + QObject::tr("Faders") + "</div>\n"
                 "<select class=\"sd-select\" id=\"fadersSelect\">\n"

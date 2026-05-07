@@ -222,7 +222,7 @@ function drawPage(data) {
       html += "<div id='sdslv" + chNum + "' class='slider-value'>" + value + "</div>";
       html += "<div class='slider-track'><input type='range' class='range-vertical sd-range' id='" + chNum + "' min='0' max='255' step='1' value='" + value + "'></div>";
       html += "<div id='sdsln" + chNum + "' class='slider-caption'>" + chNum + "</div>";
-      html += "<button class='slider-reset-btn sd-reset-btn' data-ch='" + chNum + "' type='button'>x</button>";
+      html += "<button class='slider-reset-btn sd-reset-btn' data-ch='" + chNum + "' type='button'><span class='fa-icon'>&#xf00d;</span></button>";
       html += "</div>";
     } else {
       applyChannelValue(chNum, value, isOverriding);
