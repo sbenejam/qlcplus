@@ -221,6 +221,7 @@ int main(int argc, char *argv[])
     {
         qlcplusApp.networkManager()->setWebServerConfiguration(webAccessPort, enableWebAuth,
                                                                webAccessPasswordFile);
+        qlcplusApp.networkManager()->setForceWebServerMode(true);
         qlcplusApp.networkManager()->setServerType(NetworkManager::WebServer);
         if (qlcplusApp.networkManager()->serverStarted() == false)
             qlcplusApp.networkManager()->startServer();

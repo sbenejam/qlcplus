@@ -820,6 +820,7 @@ void App::slotLoadDocFromMemory(QByteArray &xmlData)
         loadXML(doc, true, true);
         setDocLoaded(true);
         m_doc->resetModified();
+        m_doc->inputOutputMap()->startUniverses();
     }
     else
         qDebug() << "XML doesn't have a Workspace tag";

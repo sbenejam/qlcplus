@@ -95,6 +95,7 @@ public:
     QString serverPassword() const;
     void setServerPassword(QString password);
     void setWebServerConfiguration(int portNumber, bool enableAuth, const QString &passwordFile);
+    void setForceWebServerMode(bool force);
 
     int connectionsCount() const;
 
@@ -210,6 +211,8 @@ private:
     QTcpSocket *m_currentRxSocket = nullptr;
     /** Tracks the source socket of recently received actions, to suppress delayed echo */
     QHash<quint64, QPointer<QTcpSocket>> m_recentActionSources;
+    /** Keep runtime server in web mode regardless of workspace network settings. */
+    bool m_forceWebServerMode = false;
 
     /*********************************************************************
      * Client

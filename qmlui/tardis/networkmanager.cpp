@@ -174,6 +174,11 @@ void NetworkManager::setWebServerConfiguration(int portNumber, bool enableAuth, 
     m_webServerPasswordFile = passwordFile;
 }
 
+void NetworkManager::setForceWebServerMode(bool force)
+{
+    m_forceWebServerMode = force;
+}
+
 int NetworkManager::connectionsCount() const
 {
     if (m_hostType == ServerHostType)
@@ -886,6 +891,16 @@ void NetworkManager::slotDocLoaded()
 {
     if (m_doc == nullptr || m_doc->inputOutputMap() == nullptr)
         return;
+
+    if (m_forceWebServerMode)
+    {
+        setServerType(WebServer);
+
+        if (m_hostType != ClientHostType && serverStarted() == false)
+            startServer();
+
+        return;
+    }
 
     InputOutputMap *ioMap = m_doc->inputOutputMap();
 
