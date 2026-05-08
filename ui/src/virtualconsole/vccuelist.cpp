@@ -170,6 +170,8 @@ VCCueList::VCCueList(QWidget *parent, Doc *doc) : VCWidget(parent, doc)
             this, SLOT(slotItemActivated(QTreeWidgetItem*)));
     connect(m_tree, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
             this, SLOT(slotItemChanged(QTreeWidgetItem*,int)));
+    connect(m_tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
+            this, SLOT(slotItemDoubleClicked(QTreeWidgetItem *, int)));
     vbox->addWidget(m_tree);
 
     m_progress = new QProgressBar(this);
@@ -893,6 +895,16 @@ void VCCueList::slotStepNoteChanged(int idx, QString note)
     ChaserStep step = ch->steps().at(idx);
     step.note = note;
     ch->replaceStep(step, idx);
+}
+
+void VCCueList::slotItemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+    Q_UNUSED(column)
+
+    if (mode() != Doc::Operate)
+        return;
+
+    playCueAtIndex(m_tree->indexOfTopLevelItem(item));
 }
 
 void VCCueList::slotFunctionRunning(quint32 fid)
