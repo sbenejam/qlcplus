@@ -161,7 +161,7 @@ TreeModelItem *TreeModel::addItem(QString label, QVariantList data, QString path
 
         if (pathList.count() == 1)
         {
-            if (item->addChild(label, data, m_sorting, "", flags) == true)
+            if (item->addChild(label, data, m_roles, m_sorting, "", flags) == true)
             {
                 connect(item->children(), SIGNAL(roleChanged(TreeModelItem*,int,const QVariant&)),
                         this, SLOT(slotRoleChanged(TreeModelItem*,int,const QVariant&)));
@@ -171,7 +171,7 @@ TreeModelItem *TreeModel::addItem(QString label, QVariantList data, QString path
         else
         {
             QString newPath = path.mid(path.indexOf(TreeModel::separator()) + 1);
-            if (item->addChild(label, data, m_sorting, newPath, flags) == true)
+            if (item->addChild(label, data, m_roles, m_sorting, newPath, flags) == true)
             {
                 connect(item->children(), SIGNAL(roleChanged(TreeModelItem*,int,const QVariant&)),
                         this, SLOT(slotRoleChanged(TreeModelItem*,int,const QVariant&)));

@@ -867,6 +867,7 @@ void FunctionManager::moveFunction(quint32 fID, QString newPath)
 void FunctionManager::moveFunctions(QString newPath)
 {
     newPath.replace('/', TreeModel::separator());
+    const QChar sep = TreeModel::separator();
 
     const bool movingFunctions = !m_selectedIDList.isEmpty();
     const bool movingFolders = !m_selectedFolderList.isEmpty();
@@ -892,10 +893,21 @@ void FunctionManager::moveFunctions(QString newPath)
         m_functionTree->setPathData(newPath, folderParams);
     }
 
+    if (movingFunctions && !newPath.isEmpty())
+    {
+        // The drop target and its ancestors are no longer empty.
+        QStringList tokens = newPath.split(sep, Qt::SkipEmptyParts);
+        QString acc;
+        for (const QString &token : tokens)
+        {
+            acc = acc.isEmpty() ? token : acc + sep + token;
+            m_emptyFolderList.removeAll(acc);
+        }
+    }
+
     if (movingFolders)
     {
         const QStringList selectedFolders = m_selectedFolderList;
-        const QChar sep = TreeModel::separator();
 
         for (const QString &path : selectedFolders)
         {
@@ -1721,6 +1733,8 @@ void FunctionManager::updateFunctionsTree()
     for (QString &folderPath : sortedEmptyFolders)
     {
         QStringList tokens = folderPath.split(TreeModel::separator());
+        if (tokens.isEmpty())
+            continue;
         QString fName = tokens.last();
         QString basePath;
         if (tokens.count() > 1)

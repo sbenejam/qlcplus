@@ -167,7 +167,7 @@ Column
                     width: nodeChildrenView.width
                     x: 20
                     //height: 35
-                    source: hasChildren ? subTreeDelegate : childrenDelegate
+                    source: (type === App.FunctionDragItem && !hasChildren) ? childrenDelegate : subTreeDelegate
                     onLoaded:
                     {
                         item.textLabel = Qt.binding(function() { return label })
@@ -204,7 +204,7 @@ Column
                         {
                             item.nodePath = Qt.binding(function() { return nodePath + '`' + path })
                             item.isExpanded = Qt.binding(function() { return isExpanded })
-                            item.nodeChildren = childrenModel
+                            item.nodeChildren = Qt.binding(function() { return childrenModel })
                             if (item.hasOwnProperty('dropKeys'))
                                 item.dropKeys = Qt.binding(function() { return nodeContainer.dropKeys })
                             if (item.hasOwnProperty('childrenDelegate'))

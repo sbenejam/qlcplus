@@ -78,7 +78,7 @@ Rectangle
             implicitWidth: UISettings.listItemHeight
             implicitHeight: implicitWidth
             checked: isChecked
-            onCheckedChanged: funcDelegate.mouseEvent(App.Checked, cRef.id, checked, funcDelegate, 0)
+            onCheckedChanged: funcDelegate.mouseEvent(App.Checked, cRef ? cRef.id : -1, checked, funcDelegate, 0)
         }
 
         IconTextEntry
@@ -98,14 +98,15 @@ Rectangle
                 onDragActiveChanged:
                 {
                     //console.log("Drag changed on function: " + cRef.id)
-                    funcDelegate.mouseEvent(dragActive ? App.DragStarted : App.DragFinished, cRef.id, cRef.type, funcDelegate, 0)
+                    funcDelegate.mouseEvent(dragActive ? App.DragStarted : App.DragFinished,
+                                            cRef ? cRef.id : -1, cRef ? cRef.type : -1, funcDelegate, 0)
                 }
 
                 drag.target: dragItem
 
-                onPressed: (mouse) => funcDelegate.mouseEvent(App.Pressed, cRef.id, cRef.type, funcDelegate, mouse.modifiers)
-                onClicked: (mouse) => funcDelegate.mouseEvent(App.Clicked, cRef.id, cRef.type, funcDelegate, mouse.modifiers)
-                onDoubleClicked: (mouse) => funcDelegate.mouseEvent(App.DoubleClicked, cRef.id, cRef.type, funcDelegate, mouse.modifiers)
+                onPressed: (mouse) => funcDelegate.mouseEvent(App.Pressed, cRef ? cRef.id : -1, cRef ? cRef.type : -1, funcDelegate, mouse.modifiers)
+                onClicked: (mouse) => funcDelegate.mouseEvent(App.Clicked, cRef ? cRef.id : -1, cRef ? cRef.type : -1, funcDelegate, mouse.modifiers)
+                onDoubleClicked: (mouse) => funcDelegate.mouseEvent(App.DoubleClicked, cRef ? cRef.id : -1, cRef ? cRef.type : -1, funcDelegate, mouse.modifiers)
             }
 
             DropArea
@@ -114,7 +115,11 @@ Rectangle
                 anchors.fill: parent
                 keys: [ "function" ]
 
-                onDropped: drag.source.itemDropped(cRef.id, cRef.name)
+                onDropped:
+                {
+                    if (cRef)
+                        drag.source.itemDropped(cRef.id, cRef.name)
+                }
             }
         }
     }
@@ -137,4 +142,3 @@ Rectangle
         color: UISettings.bgLight
     }
 }
-
