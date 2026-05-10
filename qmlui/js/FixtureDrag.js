@@ -90,14 +90,24 @@ function endDrag(mouse)
         return false;
 
     var currContext = previewLoader.item.contextName;
-    var offset = 0;
+    var x, y;
     console.log("[FixtureDrag] Current context: " + currContext);
 
     if (currContext === "2D")
-        offset = View2D.gridPosition.x;
+    {
+        var twoDView = previewLoader.item.contextItem; // Flickable
+        var p = draggedItem.mapToItem(twoDView.contentItem,
+                              draggedItem.width / 2,
+                              draggedItem.height / 2); // or 0,0 for top-left
 
-    var x = draggedItem.x - leftSidePanel.width - offset;
-    var y = draggedItem.y - previewLoader.y - viewToolbar.height;
+        x = p.x - View2D.gridPosition.x; // == twoDContents.xOffset
+        y = p.y - View2D.gridPosition.y; // == twoDContents.yOffset
+    }
+    else
+    {
+        x = draggedItem.x - leftSidePanel.width;
+        y = draggedItem.y - previewLoader.y - viewToolbar.height;
+    }
 
     console.log("[FixtureDrag] Item x: " + x + ", y: " + y);
 
