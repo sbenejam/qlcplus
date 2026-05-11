@@ -167,7 +167,7 @@ Column
                     width: nodeChildrenView.width
                     x: 20
                     //height: 35
-                    source: (type === App.FunctionDragItem && !hasChildren) ? childrenDelegate : subTreeDelegate
+                    source: hasChildren ? subTreeDelegate : childrenDelegate
                     onLoaded:
                     {
                         item.textLabel = Qt.binding(function() { return label })
@@ -175,8 +175,13 @@ Column
                         item.isCheckable = model.isCheckable
                         item.isChecked = Qt.binding(function() { return model.isChecked })
                         item.dragItem = dragItem
-                        if (model.hasOwnProperty("type") && item.hasOwnProperty("itemType"))
-                            item.itemType = type
+                        if (item.hasOwnProperty("itemType"))
+                        {
+                            if (typeof type !== "undefined")
+                                item.itemType = type
+                            else if (model && model.type !== undefined)
+                                item.itemType = model.type
+                        }
 
                         if (item.hasOwnProperty('itemIcon'))
                             item.itemIcon = nodeContainer.itemIcon
