@@ -935,6 +935,13 @@ void VCWidget::deleteInputSurce(quint32 id, quint32 universe, quint32 channel)
     }
 }
 
+void VCWidget::deleteAllInputSources()
+{
+    m_inputSources.clear();
+
+    emit inputSourcesListChanged();
+}
+
 QList<QSharedPointer<QLCInputSource> > VCWidget::inputSources() const
 {
     return m_inputSources;
@@ -1085,6 +1092,14 @@ void VCWidget::addKeySequence(const QKeySequence &keySequence, const quint32 &id
 void VCWidget::deleteKeySequence(const QKeySequence &keySequence)
 {
     m_keySequenceMap.remove(keySequence);
+    setDocModified();
+
+    emit inputSourcesListChanged();
+}
+
+void VCWidget::deleteAllKeySequences()
+{
+    m_keySequenceMap.clear();
     setDocModified();
 
     emit inputSourcesListChanged();

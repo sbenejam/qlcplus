@@ -140,6 +140,8 @@ void VirtualConsole::resetContents()
     foreach (VCPage *page, m_pages)
     {
         page->deleteChildren();
+        page->deleteAllInputSources();
+        page->deleteAllKeySequences();
         page->resetInputSourcesMap();
         page->resetProperties(pageIndex++);
     }
