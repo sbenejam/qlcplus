@@ -411,22 +411,7 @@ Rectangle
         border.color: "#103A6E"
         transformOrigin: Item.TopLeft
     }
-/*
-    CustomScrollBar
-    {
-        anchors.right: parent.right
-        z: 2
-        flickable: twoDView
-        doubleBars: true
-    }
-    CustomScrollBar
-    {
-        anchors.bottom: parent.bottom
-        z: 2
-        flickable: twoDView
-        orientation: Qt.Horizontal
-    }
-*/
+
     PopupMonitor
     {
         id: monitorPOVPopup
