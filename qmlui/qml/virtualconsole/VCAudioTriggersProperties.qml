@@ -222,9 +222,11 @@ Rectangle
                                     checked: widgetRef && widgetRef.selectedBar === modelData.index && sideLoader.visible
                                     onCheckedChanged:
                                     {
-                                        widgetRef.selectedBar = modelData.index
                                         if (checked)
                                         {
+                                            barsList.currentChecked = this
+                                            barsList.currentType = modelData.type
+                                            widgetRef.selectedBar = modelData.index
                                             if (!sideLoader.visible)
                                                 rightSidePanel.width += UISettings.sidePanelWidth
                                             sideLoader.visible = true
@@ -235,14 +237,17 @@ Rectangle
                                                 sideLoader.source = "qrc:/FunctionManager.qml"
                                             else if (modelData.type === VCAudioTriggers.VCWidgetBar)
                                                 sideLoader.source = "qrc:/VCWidgetsList.qml"
-                                            barsList.currentChecked = this
-                                            barsList.currentType = modelData.type
                                         }
                                         else
                                         {
-                                            rightSidePanel.width -= sideLoader.width
+                                            if (barsList.currentChecked !== this)
+                                                return
+
+                                            if (sideLoader.visible)
+                                                rightSidePanel.width -= sideLoader.width
                                             sideLoader.source = ""
                                             sideLoader.visible = false
+                                            barsList.currentChecked = null
                                             barsList.currentType = VCAudioTriggers.None
                                         }
                                     }
