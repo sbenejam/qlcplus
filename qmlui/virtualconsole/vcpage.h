@@ -45,6 +45,8 @@ public:
     void setPageScale(qreal factor);
 
 private:
+    bool isEffectivelyVisible(const VCWidget *widget) const;
+
     /** Reference to a PreviewContext, registered to the Context Manager */
     PreviewContext *m_pageContext;
 

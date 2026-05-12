@@ -812,12 +812,10 @@ void VCFrame::setCurrentPage(int pageNum)
         VCWidget *widget = it.key();
         if (page == m_currentPage)
         {
-            widget->setDisabled(false);
             widget->setVisible(true);
         }
         else
         {
-            widget->setDisabled(true);
             widget->setVisible(false);
         }
     }
